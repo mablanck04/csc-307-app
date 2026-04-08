@@ -3,6 +3,9 @@ import express from "express";
 
 const app = express();
 const port = 8000;
+
+app.use(express.json());
+
 const users = {
   users_list: [
     {
@@ -44,7 +47,14 @@ const findUserById = (id) =>
         (user) => user["id"] === id
     );
 
-app.use(express.json());
+const addUser = (user) => {
+  users["users_list"].push(user);
+  return user;
+};
+
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
 app.get("/users/:id", (req, res) => {
     const id = req.params["id"];  // or req.params.id
@@ -56,8 +66,25 @@ app.get("/users/:id", (req, res) => {
     }
 });
 
+app.get("/users", (req, res) => {
+  const name = req.query.name;
+  if (name != undefined) {
+    let result = findUserByName(name);
+    result = { users_list: result };
+    res.send(result);
+  } else {
+    res.send(users);
+  }
+});
+
+app.post("/users", (req, res) => {
+  const userToAdd = req.body;
+  addUser(userToAdd);
+  res.send();
+});
+
 app.listen(port, () => {
     console.log(
-        'Example app listening at http://localhost:${port}'
+        `Example app listening at http://localhost:${port}`
     );
 });
