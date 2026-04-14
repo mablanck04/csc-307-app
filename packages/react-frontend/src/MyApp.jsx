@@ -14,15 +14,35 @@ function MyApp() {
   }
 
   function updateList(person) {
-    postUser(person)
-      .then(() => setCharacters([...characters, person]))
-      .catch((error) => {
-        console.log(error);
-      })
+    postUser(person) 
+    .then(() => setCharacters([...characters, person]))
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   function fetchUsers() {
     const promise = fetch("http://localhost:8000/users");
+    return promise;
+  }
+
+  function postUser(person) {
+    const promise = fetch("http://localhost:8000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(person),
+    })
+    .then(response => {
+      if (response.status === 201) {
+        return response.json();
+      }
+    })
+    .then(newUser => {
+      setCharacters([...characters, newUser]);
+    });
+
     return promise;
   }
 
@@ -32,18 +52,6 @@ function MyApp() {
       .then((json) => setCharacters(json["users_list"]))
       .catch((error) => { console.log(error); });
   }, [] );
-
-  function postUser(person) {
-    const promise = fetch("http://localhost:8000/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(person),
-    });
-
-    return promise;
-  }
   
   return (
     <div className="container">

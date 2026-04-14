@@ -101,18 +101,19 @@ app.get("/users", (req, res) => {
 });
 
 app.post("/users", (req, res) => {
-  const userToAdd = req.body;
+  const userToAdd = {id: Math.random(), ...req.body};
   addUser(userToAdd);
-  res.send();
+  res.status(201).send(userToAdd);
 });
 
 app.delete("/users/:id", (req, res) => {
     const id = req.params["id"];  // or req.params.id
-    let result = findUserById(id);
+    const result = users["users_list"].findIndex((user) => user["id"] === id);
     if (result === undefined) {
         res.status(404).send("Resource not found.");
     } else {
-        res.send(result);
+      users["users_list"].splice(index, 1);
+        res.status(204).send();
     }
 });
 
