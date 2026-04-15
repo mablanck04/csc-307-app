@@ -100,20 +100,22 @@ app.get("/users", (req, res) => {
   }
 });
 
+// add user with new random ID
 app.post("/users", (req, res) => {
   const userToAdd = {id: Math.random(), ...req.body};
   addUser(userToAdd);
   res.status(201).send(userToAdd);
 });
 
+// delete user by ID (triggered by button on frontend)
 app.delete("/users/:id", (req, res) => {
-    const id = req.params["id"];  // or req.params.id
-    const result = users["users_list"].findIndex((user) => user["id"] === id);
-    if (result === undefined) {
+    const id = req.params["id"];  
+    const index = users["users_list"].findIndex((user) => user["id"] === id);
+    if (index === -1) {
         res.status(404).send("Resource not found.");
     } else {
       users["users_list"].splice(index, 1);
-        res.status(204).send();
+      res.status(204).send();
     }
 });
 
