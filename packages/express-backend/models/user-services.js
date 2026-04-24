@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import userModel from "./user";
+import userModel from "./user.js";
 
 mongoose.set("debug", true);
 
 mongoose
-    .connect("mongodb://localhost:27017/users", {
+    .connect("mongodb://localhost:27017/users/users_list", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
