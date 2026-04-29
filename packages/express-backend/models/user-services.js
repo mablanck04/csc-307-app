@@ -11,6 +11,8 @@ function getUsers(name, job) {
   let promise;
   if (name === undefined && job === undefined) {
     promise = userModel.find();
+  } else if (name && job) {
+    promise = findUserByNameAndJob(name, job);
   } else if (name && !job) {
     promise = findUserByName(name);
   } else if (job && !name) {
@@ -40,7 +42,9 @@ function findUserByJob(job) {
 function deleteUserById(id) {
   return userModel.findByIdAndDelete(id);
 }
-
+function findUserByNameAndJob(name, job) {
+  return userModel.find({ name: name, job: job});
+}
 export default {
   addUser,
   getUsers,
@@ -48,4 +52,5 @@ export default {
   findUserByName,
   findUserByJob,
   deleteUserById,
+  findUserByNameAndJob,
 };
