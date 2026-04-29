@@ -59,14 +59,15 @@ app.post("/users", async (req, res) => {
 });
 
 // remove a user, given their id
-app.delete("/users/:id", (req, res) => {
+app.delete("/users/:id", async (req, res) => {
   const id = req.params["id"];
   try {
-    const deletedUser = userServices.deleteUserById(id);
+    const deletedUser = await userServices.deleteUserById(id);
     if (!deletedUser) {
       return res.status(404).send("Resource not found.");
+    } else {
+      res.status(204).send();
     }
-    res.status(204).send();
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred on the server.");
